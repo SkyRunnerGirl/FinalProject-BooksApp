@@ -1,0 +1,59 @@
+{
+    "current": [
+        {
+            "id": 1,
+            "title": "Dark Age",
+            "author": "Pierce Brown",
+            "series": "Red Rising #5",
+            "image": "/images/dark-age.jpg",
+            "status": "Reading"
+
+        }
+    ],
+    "finished": [
+        {
+            "id": 2,
+            "title": "Assassin's Apprentice",
+            "author": "Robin Hobb",
+            "series": "Farseer Trilogy #1",
+            "rating": 5,
+            "review": "Amazing...can't wait to finish the trilogy!",
+            "image": "/images/assassin's-apprentice.jpg",
+            "status": "Finished"
+
+        },
+        {
+            "id": 3,
+            "title": "Royal Assassin",
+            "author": "Robin Hobb",
+            "series": "Farseer Trilogy #2",
+            "rating": 5,
+            "review": "Amazing...can't wait to finish the trilogy!",
+            "image": "/images/royal-assassin.jpg",
+            "status": "Finished"
+
+        },
+        {
+            "id": 4,
+            "title": "Assassin's Quest",
+            "author": "Robin Hobb",
+            "series": "Farseer Trilogy #3",
+            "rating": 5,
+            "review": "Amazing...can't wait to finish the trilogy!",
+            "image": "/images/assassin's-quest.jpg",
+            "status": "Finished"
+
+        }
+    ],
+    "future": [
+        {
+            "id": 5,
+            "title": "Light Bringer",
+            "author": "Pierce Brown",
+            "series": "Red Rising #6",
+            "image": "/images/light-bringer.jpg",
+            "status": "Future Read"
+
+        }
+    ]
+}

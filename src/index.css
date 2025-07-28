@@ -1,0 +1,51 @@
+ * {
+    background-color: #9ab3b6;
+ }
+
+ #root-container {
+    padding: 1rem;
+    
+ }
+ 
+ h1 {
+    margin: 0;
+    margin-bottom: 10px;
+    text-align: center;
+    color: white;
+    font-family: cursive;
+    font-size: 3rem;
+ }
+
+#navbar {
+    margin-bottom: 1rem;
+    padding: .5rem;
+    background-color: #60767a;
+    color: white;
+}
+
+#navbar-container {
+    background-color: #60767a;
+}
+
+#add-btn {
+    background-color: #403a3a;
+    border-color: #403a3a;
+    color: white
+}
+
+#update-btn {
+    background-color: #de9450;
+    border-color: #de9450;
+    color: white
+}
+
+#delete-btn {
+    background-color: #ff6961;
+    border-color: #ff6961;
+    color: white
+}
+
+#card-container {
+    display: flex;
+    justify-content: center;
+}
