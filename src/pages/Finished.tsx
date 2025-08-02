@@ -4,7 +4,7 @@ import { useOutletContext } from "react-router-dom";
 import type { Book } from "../types";
 
 type ContextType = {
-  books: Book;
+  books: Book[];
   fetchBooks: (bookType: string) => void;
   updateBook: (
     bookId: number,
@@ -14,32 +14,42 @@ type ContextType = {
   deleteBook: (bookId: number, bookType: string) => void;
   isUpdateModalOpen: boolean;
   setIsUpdateModalOpen: (newValue: boolean) => void;
-  handleUpdateButtonClick: (bookId: number) => void
+  handleUpdateButtonClick: (bookId: number) => void;
+  selectedBookId: number;
 };
 
 export default function Finished() {
-  const { books, fetchBooks, updateBook, deleteBook, isUpdateModalOpen, setIsUpdateModalOpen, handleUpdateButtonClick } =
-    useOutletContext<ContextType>();
+  const {
+    books,
+    fetchBooks,
+    updateBook,
+    deleteBook,
+    isUpdateModalOpen,
+    setIsUpdateModalOpen,
+    handleUpdateButtonClick,
+    selectedBookId
+  } = useOutletContext<ContextType>();
 
   useEffect(() => {
     fetchBooks("finished");
-  }, []);
+  }, [fetchBooks]);
 
   if (books === null) {
     return;
   }
+const selectedBook = books.find((book) => book.id === selectedBookId);
 
   return (
     <>
       <div>
-      <h1 id="finished-h1">Past Adventures</h1>
+        <h1 id="finished-h1">Past Adventures</h1>
         {books.map((book) => (
           <BookCard
             key={book.id}
             book={book}
             updateBook={updateBook}
             deleteBook={deleteBook}
-            selectedBook={book}
+            selectedBook={selectedBook}
             isUpdateModalOpen={isUpdateModalOpen}
             setIsUpdateModalOpen={setIsUpdateModalOpen}
             handleUpdateButtonClick={handleUpdateButtonClick}

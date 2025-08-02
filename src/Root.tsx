@@ -6,12 +6,13 @@ import RandomIdGenertor from "./components/RandomIdGenerator";
 
 export default function Root() {
   const [errorMessage, setErrorMessage] = useState(" ");
-  const [books, setBooks] = useState({});
+  const [books, setBooks] = useState<Book[]>([]);
 
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [selectedBookId, setSelectedBookId] = useState<null | number>(null);
 
   const handleUpdateButtonClick = (bookId: number) => {
+    console.log('handleUpdateButton',bookId)
     setSelectedBookId(bookId);
     setIsUpdateModalOpen(true);
   };
@@ -82,7 +83,7 @@ export default function Root() {
       image: image,
       status: status,
     };
-    setBooks(`[${newBook}, ...${status}]`);
+    setBooks([newBook, ...books]);
   };
 
   const updateBook = async (
@@ -90,34 +91,32 @@ export default function Root() {
     updatedData: Omit<Book, "id">,
     bookType: string
   ) => {
-    
+    try {
+      const response = await fetch(`http://localhost:3000/${bookType}/${bookId}`);
+      const bookToUpdate = await response.json();
+
     if (updatedData.status !== bookType) {
-      fetch(`http://localhost:3000/${bookType}/${bookId}`, 
+      await fetch(`http://localhost:3000/${bookType}/${bookId}`, 
         {
         method: "DELETE",
-      })
+      });
       
-      .then((response) => {
-        if (!response.ok) throw new Error("Failed to delete object.");
-        return fetch(`http://localhost:3000/${updatedData.status}/${bookId}`, 
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(updatedData),
-          });
-        })
+      const updatedBook = { ...bookToUpdate, ...updatedData};
+      await fetch(`http://localhost:3000/${updatedData.status}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatedBook),
+        }
+      );
         
-        //Do I need to setBooks here if I change the array
+        //Do I need to setBooks here if I change the array???
         fetchBooks(updatedData.status)
         fetchBooks(bookType)
         
-        .then((response) => {
-          if (!response.ok)
-            throw new Error("Failed to add object to new array");
-          return response.json();
-        });
+        console.log("Updated Book moved and updated successfully!");
     } else {
       try {
         const response = await fetch(
@@ -145,14 +144,17 @@ export default function Root() {
         }
       }
     }
+    } catch (error) {
+      console.log("Error updating Book: ", error);
+    }
   };
 
   const deleteBook = async (bookId: number, bookType: string) => {
     try {
-      await fetch(`http://localhost:3000/${bookType}/${bookId}`, {
+      const response = await fetch(`http://localhost:3000/${bookType}/${bookId}`, {
         method: "DELETE",
       });
-
+      
       fetchBooks(bookType);
 
       if (!response.ok) {

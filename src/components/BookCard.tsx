@@ -11,17 +11,28 @@ import UpdateBookForm from "./UpdateBookForm";
 type BookCardProps = {
   book: Book;
   deleteBook: (id: number, bookType: string) => void;
-  updateBook: (bookId: number, updatedData: Omit<Book, "id">, bookType: string) => void;
-  selectedBook: Book
-  isUpdateModalOpen: boolean
-  setIsUpdateModalOpen: (newValue: boolean) => void;
+  updateBook: (
+    bookId: number,
+    updatedData: Omit<Book, "id">,
+    bookType: string
+  ) => void;
+  selectedBook: Book | undefined;
+  isUpdateModalOpen: boolean;
+  setIsUpdateModalOpen: (newValue: boolean) => void
   handleUpdateButtonClick: (bookId: number) => void
 };
 
-export default function BookCard({ book, selectedBook, updateBook, deleteBook, isUpdateModalOpen, setIsUpdateModalOpen, handleUpdateButtonClick }: BookCardProps) {
-
+export default function BookCard({
+  book,
+  selectedBook,
+  updateBook,
+  deleteBook,
+  isUpdateModalOpen,
+  setIsUpdateModalOpen,
+  handleUpdateButtonClick,
+}: BookCardProps) {
   const handleUpdateBookClose = () => setIsUpdateModalOpen(false);
-
+  console.log("BookCard", selectedBook);
   return (
     <>
       <div id="card-container">
@@ -54,7 +65,10 @@ export default function BookCard({ book, selectedBook, updateBook, deleteBook, i
                   id="update-btn"
                   type="button"
                   className="btn"
-                  onClick={() => handleUpdateButtonClick(book.id)}
+                  onClick={() => {
+                    handleUpdateButtonClick(book.id);
+                    console.log(book);
+                  }}
                 >
                   Update
                 </Button>
@@ -62,7 +76,7 @@ export default function BookCard({ book, selectedBook, updateBook, deleteBook, i
                   id="delete-btn"
                   type="button"
                   className="btn btn-danger"
-                  onClick={() => deleteBook(book.id,book.status)}
+                  onClick={() => deleteBook(book.id, book.status)}
                 >
                   Delete
                 </Button>

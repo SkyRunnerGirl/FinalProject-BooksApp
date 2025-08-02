@@ -2,24 +2,28 @@ import { useState, type ChangeEvent, type MouseEvent } from "react";
 import type { Book } from "../types";
 
 type UpdateBookFormProps = {
-  selectedBook: Book;
+  selectedBook: Book | undefined;
   handleUpdateBookClose: () => void;
-  updateBook: (bookId: number, updatedData: Omit<Book, "id">, bookType: string) => void;
+  updateBook: (
+    bookId: number,
+    updatedData: Omit<Book, "id">,
+    bookType: string
+  ) => void;
 };
 
-export default function UpdateBookForm({ 
-  selectedBook, 
-  handleUpdateBookClose, 
-  updateBook}: UpdateBookFormProps) {
-
+export default function UpdateBookForm({
+  selectedBook,
+  handleUpdateBookClose,
+  updateBook,
+}: UpdateBookFormProps) {
   const [formValues, setFormValues] = useState({
-    title: selectedBook.title || "",
-    author: selectedBook.author || "",
-    series: selectedBook.series || "",
-    rating: selectedBook.rating || "",
-    review: selectedBook.review || "",
-    image: selectedBook.image || "",
-    status: selectedBook.status || "",
+    title: selectedBook?.title || "",
+    author: selectedBook?.author || "",
+    series: selectedBook?.series || "",
+    rating: selectedBook?.rating || "",
+    review: selectedBook?.review || "",
+    image: selectedBook?.image || "",
+    status: selectedBook?.status || "",
   });
 
   const handleChange = (
@@ -35,7 +39,7 @@ export default function UpdateBookForm({
     if (!selectedBook) {
       return;
     }
-  
+
     updateBook(selectedBook.id, formValues, selectedBook.status);
 
     handleUpdateBookClose();

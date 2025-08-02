@@ -1,20 +1,22 @@
 import { useState, type ChangeEvent, type MouseEvent } from "react";
 
 type AddFormProps = {
-  addNewBook: (
-    title: string, 
-    author: string, 
-    series: string, 
-    rating: number, 
-    review: string, 
-    image: string, 
+  addNewBook?: (
+    title: string,
+    author: string,
+    series: string,
+    rating: number,
+    review: string,
+    image: string,
     status: string
-  ) => void
-  handleAddBookModalClose: () => void
-}
+  ) => void;
+  handleAddBookModalClose: () => void;
+};
 
-export default function AddBookForm({ addNewBook, handleAddBookModalClose }: AddFormProps) {
-
+export default function AddBookForm({
+  addNewBook,
+  handleAddBookModalClose,
+}: AddFormProps) {
   const [formValues, setFormValues] = useState({
     title: "",
     author: "",
@@ -37,15 +39,17 @@ export default function AddBookForm({ addNewBook, handleAddBookModalClose }: Add
     event.preventDefault();
 
     //Must fix addNewBook function!!
-    addNewBook(
-      formValues.title, 
-      formValues.author, 
-      formValues.series, 
-      formValues.rating, 
-      formValues.review, 
-      formValues.image, 
-      formValues.status
-    );
+    if (addNewBook) {
+      addNewBook(
+        formValues.title,
+        formValues.author,
+        formValues.series,
+        formValues.rating,
+        formValues.review,
+        formValues.image,
+        formValues.status
+      );
+    }
     handleAddBookModalClose();
   };
 

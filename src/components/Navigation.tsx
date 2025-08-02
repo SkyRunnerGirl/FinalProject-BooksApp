@@ -13,7 +13,7 @@ import AddBookForm from "./AddBookForm";
 import { useState } from "react";
 
 type NavProps = {
-  addNewBook: (
+  addNewBook?: (
     title: string, 
     author: string, 
     series: string, 
