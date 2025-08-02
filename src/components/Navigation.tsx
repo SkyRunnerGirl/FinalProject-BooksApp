@@ -24,6 +24,11 @@ type NavProps = {
   ) => void
 }
 
+//This component is the NavBar at the top of each page.
+//It is designed to be present no matter what page you are on.
+//The addNewBook button and elements are part of it, so the function is passed
+//as a prop to add to the corresponding button.
+//Used React Bootstrap to style.
 export default function Navigation({ addNewBook }: NavProps) {
 
   const [isAddBookModalOpen, setIsAddBookModalOpen] = useState(false);

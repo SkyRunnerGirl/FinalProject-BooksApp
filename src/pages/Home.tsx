@@ -1,5 +1,7 @@
 import { Image } from "react-bootstrap";
 
+//This displays the landing page of the app.
+//You can get here by clicking the "Bookshelf" element in the NavBar.
 export default function Home() {
   return (
     <div className="container text-center">

@@ -11,11 +11,14 @@ type UpdateBookFormProps = {
   ) => void;
 };
 
+//Modal Form that is used to update information for each book card.
 export default function UpdateBookForm({
   selectedBook,
   handleUpdateBookClose,
   updateBook,
 }: UpdateBookFormProps) {
+  //The useState sets the values in the form to those that are currently
+  //on the object so you know what's there and what needs to be changed.
   const [formValues, setFormValues] = useState({
     title: selectedBook?.title || "",
     author: selectedBook?.author || "",
@@ -26,6 +29,7 @@ export default function UpdateBookForm({
     status: selectedBook?.status || "",
   });
 
+  //This gathers all the changes to be updated at once.
   const handleChange = (
     event: ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) =>
@@ -34,6 +38,9 @@ export default function UpdateBookForm({
       [event.target.name]: event.target.value,
     });
 
+  //This makes the changes when the submit button is selected and
+  //calls the updateBook funciton on the Root.jsx with the needed
+  //parameters from this update form and then closes the form.
   const handleSubmit = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     if (!selectedBook) {

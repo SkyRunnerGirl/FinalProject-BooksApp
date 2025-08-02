@@ -18,6 +18,7 @@ type ContextType = {
   selectedBookId: number;
 };
 
+//Displays the books in the "finished" array in the db.json file.
 export default function Finished() {
   const {
     books,
@@ -30,6 +31,7 @@ export default function Finished() {
     selectedBookId
   } = useOutletContext<ContextType>();
 
+  //Uses the fetchBooks to know which array to grab.
   useEffect(() => {
     fetchBooks("finished");
   }, [fetchBooks]);
@@ -37,7 +39,9 @@ export default function Finished() {
   if (books === null) {
     return;
   }
-const selectedBook = books.find((book) => book.id === selectedBookId);
+  //Tells the selectedBook variable that it should be the one that matches the id
+  //of the "update button" that is selected for the starting update form values.
+  const selectedBook = books.find((book) => book.id === selectedBookId);
 
   return (
     <>

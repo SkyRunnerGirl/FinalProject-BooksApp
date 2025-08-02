@@ -13,6 +13,8 @@ type AddFormProps = {
   handleAddBookModalClose: () => void;
 };
 
+//Form that gathers all the information for creating a new book.
+//Uses the addNewBook and handleAddBookModalClose from the Root.jsx file.
 export default function AddBookForm({
   addNewBook,
   handleAddBookModalClose,
@@ -27,18 +29,20 @@ export default function AddBookForm({
     status: "",
   });
 
+  //Gathers all the changes and handles them as one.
   const handleChange = (
     event: ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) =>
+    //Sets the values for each object property to the input provided.
     setFormValues({
       ...formValues,
       [event.target.name]: event.target.value,
     });
 
+  //Submits the form and calls the addNewBook function to create the new book with form values.
   const handleSubmit = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
 
-    //Must fix addNewBook function!!
     if (addNewBook) {
       addNewBook(
         formValues.title,
@@ -50,6 +54,7 @@ export default function AddBookForm({
         formValues.status
       );
     }
+    //Closes the modal after hitting the submit button.
     handleAddBookModalClose();
   };
 

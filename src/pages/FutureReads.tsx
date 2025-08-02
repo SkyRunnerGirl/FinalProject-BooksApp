@@ -18,6 +18,7 @@ type ContextType = {
   selectedBookId: number;
 };
 
+//Displays the books in the "future" array in the db.json file.
 export default function FutureReads() {
   const {
     books,
@@ -30,6 +31,7 @@ export default function FutureReads() {
     selectedBookId
   } = useOutletContext<ContextType>();
 
+  //Uses the fetchBooks to know which array to grab.
   useEffect(() => {
     fetchBooks("future");
   }, [fetchBooks]);
@@ -37,6 +39,8 @@ export default function FutureReads() {
   if (books === null) {
     return;
   }
+  //Tells the selectedBook variable that it should be the one that matches the id
+  //of the "update button" that is selected for the starting update form values.
   const selectedBook = books.find((book) => book.id === selectedBookId)
 
   return (

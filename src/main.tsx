@@ -10,6 +10,7 @@ import Root from "./Root.tsx";
 import Home from "./pages/Home.tsx";
 import Navigation from "./components/Navigation.tsx";
 
+//This routes the pages and has the children be independent of each other.
 const router = createBrowserRouter([
   {
     path: "/",
@@ -29,6 +30,8 @@ const router = createBrowserRouter([
       },
     ],
   },
+  //This ensures the NavBar is on the landing page as it's separate from the
+  //other pages and not returned by the Root page.
   {
     path: "/pages/Home",
     element:  (

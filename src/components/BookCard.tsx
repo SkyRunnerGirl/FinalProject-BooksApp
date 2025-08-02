@@ -22,6 +22,8 @@ type BookCardProps = {
   handleUpdateButtonClick: (bookId: number) => void
 };
 
+//This handles how each book card will be displayed.
+//It uses multiple props and many are just passed through to the Update Modal Form.
 export default function BookCard({
   book,
   selectedBook,
