@@ -2,15 +2,19 @@ import { Outlet } from "react-router-dom";
 import Navigation from "./components/Navigation";
 import { useState } from "react";
 import type { Book } from "./types";
-import BookCard from "./components/BookCard";
+import RandomIdGenertor from "./components/RandomIdGenerator";
 
 export default function Root() {
   const [errorMessage, setErrorMessage] = useState(" ");
   const [books, setBooks] = useState({});
+
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [selectedBookId, setSelectedBookId] = useState<null | number>(null);
-  
-//HOW DO I CREATE A SELECTEDBOOK VARIABLE USING SELECTEDBOOKID WHEN I DON'T KNOW WHICH ARRAY IT WILL BE IN??
-//THE STATUS PROPERTY HOLDS THE ARRAY VALUE THE ITEM WILL BE STORED IN AT ANY GIVEN TIME.
+
+  const handleUpdateButtonClick = (bookId: number) => {
+    setSelectedBookId(bookId);
+    setIsUpdateModalOpen(true);
+  };
 
   const fetchBooks = async (bookType: string) => {
     try {
@@ -20,6 +24,7 @@ export default function Root() {
       } else {
         const data = await response.json();
         setBooks(data);
+        return data;
       }
     } catch (error: unknown) {
       if (error instanceof Error) {
@@ -28,107 +33,153 @@ export default function Root() {
     }
   };
 
-  const addNewBook = async (bookData: Omit<Book, "id">, bookType: string) => {
+  const addNewBook = async (
+    title: string,
+    author: string,
+    series: string,
+    rating: number,
+    review: string,
+    image: string,
+    status: string
+  ) => {
     try {
-        const response = await fetch(`http://localhost:3000/${bookType}`, {
+      const response = await fetch(`http://localhost:3000/${status}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({bookData}),
+        body: JSON.stringify({
+          title,
+          author,
+          series,
+          rating,
+          review,
+          image,
+          status,
+        }),
       });
+
+      fetchBooks(status);
 
       if (!response.ok) {
         setErrorMessage(response.statusText);
       }
 
       const result = await response.json();
-      return result
-      
+      return result;
     } catch (error: unknown) {
       if (error instanceof Error) {
         setErrorMessage(error.message);
       }
     }
     const newBook = {
-      //id: ,
-      title: bookData.title,
-      author: bookData.author,
-      series: bookData.series,
-      rating: bookData.rating,
-      review: bookData.review,
-      image: bookData.image,
-      status: bookData.status
-    }
-    setBooks(`[newBook, ...${bookType}]`) //Is this correct usage of the backticks for temperal literals??
-   
-    fetchBooks(bookType);
+      id: RandomIdGenertor(12, 10000),
+      title: title,
+      author: author,
+      series: series,
+      rating: rating,
+      review: review,
+      image: image,
+      status: status,
     };
+    setBooks(`[${newBook}, ...${status}]`);
+  };
 
-  const updateBook = async (bookId: number, updatedData: Omit<Book, "id">, bookType: string) => {
-    try {
-      const response = await fetch(`http://localhost:3000/${bookType}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(updatedData),
-      });
+  const updateBook = async (
+    bookId: number,
+    updatedData: Omit<Book, "id">,
+    bookType: string
+  ) => {
+    
+    if (updatedData.status !== bookType) {
+      fetch(`http://localhost:3000/${bookType}/${bookId}`, 
+        {
+        method: "DELETE",
+      })
+      
+      .then((response) => {
+        if (!response.ok) throw new Error("Failed to delete object.");
+        return fetch(`http://localhost:3000/${updatedData.status}/${bookId}`, 
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(updatedData),
+          });
+        })
+        
+        //Do I need to setBooks here if I change the array
+        fetchBooks(updatedData.status)
+        fetchBooks(bookType)
+        
+        .then((response) => {
+          if (!response.ok)
+            throw new Error("Failed to add object to new array");
+          return response.json();
+        });
+    } else {
+      try {
+        const response = await fetch(
+          `http://localhost:3000/${bookType}/${bookId}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(updatedData),
+          }
+        );
 
-      if (!response.ok) {
-        setErrorMessage(response.statusText);
-      }
+        fetchBooks(bookType);
 
-      const result = await response.json();
-      return result
+        if (!response.ok) {
+          setErrorMessage(response.statusText);
+        }
 
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        setErrorMessage(error.message);
+        const result = await response.json();
+        return result;
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          setErrorMessage(error.message);
+        }
       }
     }
-
-    //DO I NEED TO PARSE OUT UPDATEDDATA TO PROPERTY AND NEWVALUE ELEMENTS????
-    setBooks(`current${bookType} => current${bookType}.map( book => ( book.id !== ${bookId} ? book : {...book, ${updatedData} ))`);
-    fetchBooks(bookType);
   };
 
   const deleteBook = async (bookId: number, bookType: string) => {
     try {
-      fetch(`http://localhost:3000/${bookType}`, {
+      await fetch(`http://localhost:3000/${bookType}/${bookId}`, {
         method: "DELETE",
       });
 
-      if (!Response.ok) {
-        setErrorMessage(Response.statusText);
-      }
+      fetchBooks(bookType);
 
-      setBooks(`${bookType}.filter(book => book.id !== ${bookId})`);
+      if (!response.ok) {
+        setErrorMessage(response.statusText);
+      }
     } catch (error: unknown) {
       if (error instanceof Error) {
         setErrorMessage(error.message);
       }
     }
-    fetchBooks (bookType);
   };
 
   return (
     <>
-      <Navigation 
-        addNewBook={addNewBook}
-      />
+      <Navigation addNewBook={addNewBook} />
       <Outlet
         context={{
           fetchBooks,
           books,
           errorMessage,
+          updateBook,
+          deleteBook,
+          selectedBookId,
+          isUpdateModalOpen,
+          setIsUpdateModalOpen,
+          handleUpdateButtonClick,
         }}
-      />
-      <BookCard 
-        book={books}
-        selectedBook={selectedBook}
-        updateBook={updateBook}
-        deleteBook={deleteBook}
       />
     </>
   );

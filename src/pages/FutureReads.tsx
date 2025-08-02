@@ -1,52 +1,51 @@
-import { Modal, ModalBody, ModalTitle } from "react-bootstrap";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import type { Book } from "../types";
 import BookCard from "../components/BookCard";
 import { useOutletContext } from "react-router-dom";
 
+type ContextType = {
+  books: Book;
+  fetchBooks: (bookType: string) => void;
+  updateBook: (
+    bookId: number,
+    updatedData: Omit<Book, "id">,
+    bookType: string
+  ) => void;
+  deleteBook: (bookId: number, bookType: string) => void;
+  isUpdateModalOpen: boolean;
+  setIsUpdateModalOpen: (newValue: boolean) => void;
+  handleUpdateButtonClick: (bookId: number) => void
+};
+
 export default function FutureReads() {
-  const { fetchBooks, books } = useOutletContext();
+  const { books, fetchBooks, updateBook, deleteBook, isUpdateModalOpen, setIsUpdateModalOpen, handleUpdateButtonClick } =
+    useOutletContext<ContextType>();
 
   useEffect(() => {
     fetchBooks("future");
   }, []);
 
-  //const selectedFutureBook = future.find((book) => book.id === selectedBookId);
-
-  //const [isAddFutureBookModalOpen, setIsAddFutureBookModalOpen] = useState(false);
-
-  //const handleAddFutureBookClose = () => setIsAddFutureBookModalOpen(false);
+  if (books === null) {
+    return;
+  }
 
   return (
     <>
-      <h1 id="future-h1">Upcoming Adventures</h1>
       <div>
-          {Object.values(books).length > 0 &&
-            Object.values(books).map((book) => (
-              <BookCard
-                key={book.id}
-                book={book}
-                //deleteBook={deleteBook}
-                //updateBook={updateBook}
-              />
-            ))}
-      </div>
-
-      {/* <Modal
-        show={isAddFutureBookModalOpen}
-        onHide={() => setIsAddFutureBookModalOpen(false)}
-      >
-        <Modal.Header closeButton>
-          <ModalTitle>Add New Future Book</ModalTitle>
-        </Modal.Header>
-
-        <ModalBody>
-          <AddFutureBookForm
-            addNewFutureBook={addNewFutureBook}
-            handleAddFutureBookClose={handleAddFutureBookClose}
+      <h1 id="future-h1">Upcoming Adventures</h1>
+        {books.map((book) => (
+          <BookCard
+            key={book.id}
+            book={book}
+            updateBook={updateBook}
+            deleteBook={deleteBook}
+            selectedBook={book}
+            isUpdateModalOpen={isUpdateModalOpen}
+            setIsUpdateModalOpen={setIsUpdateModalOpen}
+            handleUpdateButtonClick={handleUpdateButtonClick}
           />
-        </ModalBody>
-      </Modal> */}
+        ))}
+      </div>
     </>
   );
 }

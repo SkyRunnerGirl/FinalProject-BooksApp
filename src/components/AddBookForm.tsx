@@ -1,8 +1,15 @@
 import { useState, type ChangeEvent, type MouseEvent } from "react";
-import type { Book } from "../types";
 
 type AddFormProps = {
-  addNewBook: (bookData: Omit<Book, "id">, bookType: string) => void
+  addNewBook: (
+    title: string, 
+    author: string, 
+    series: string, 
+    rating: number, 
+    review: string, 
+    image: string, 
+    status: string
+  ) => void
   handleAddBookModalClose: () => void
 }
 
@@ -30,8 +37,15 @@ export default function AddBookForm({ addNewBook, handleAddBookModalClose }: Add
     event.preventDefault();
 
     //Must fix addNewBook function!!
-    addNewBook(formValues, formValues.status);
-
+    addNewBook(
+      formValues.title, 
+      formValues.author, 
+      formValues.series, 
+      formValues.rating, 
+      formValues.review, 
+      formValues.image, 
+      formValues.status
+    );
     handleAddBookModalClose();
   };
 
@@ -125,9 +139,9 @@ export default function AddBookForm({ addNewBook, handleAddBookModalClose }: Add
           value={formValues.status}
         >
           <option value="">Status</option>
-          <option value="current">Reading</option>
-          <option value="future">Future Read</option>
-          <option value="finished">Finished</option>
+          <option value="current">current</option>
+          <option value="future">future</option>
+          <option value="finished">finished</option>
         </select>
       </div>
       <div className="text-end">

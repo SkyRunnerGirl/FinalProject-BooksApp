@@ -11,13 +11,21 @@ import {
 import { Link } from "react-router-dom";
 import AddBookForm from "./AddBookForm";
 import { useState } from "react";
-import type { Book } from "../types";
 
 type NavProps = {
-  addNewBook: (bookData: Omit<Book, "id">, bookType: string) => void
+  addNewBook: (
+    title: string, 
+    author: string, 
+    series: string, 
+    rating: number, 
+    review: string, 
+    image: string, 
+    status: string
+  ) => void
 }
 
 export default function Navigation({ addNewBook }: NavProps) {
+
   const [isAddBookModalOpen, setIsAddBookModalOpen] = useState(false);
   const handleAddBookModalClose = () => setIsAddBookModalOpen(false);
 
@@ -32,7 +40,7 @@ export default function Navigation({ addNewBook }: NavProps) {
             style={{ color: "white", background: "#60767a" }}
           >
             <img
-              src="../public/images/book-logo.png"
+              src="../images/book-logo.png"
               width="30"
               height="30"
               style={{ background: "white" }}

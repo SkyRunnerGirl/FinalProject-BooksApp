@@ -16,7 +16,7 @@ export default function UpdateBookForm({
     title: selectedBook.title || "",
     author: selectedBook.author || "",
     series: selectedBook.series || "",
-    rating: selectedBook.rating || 0,
+    rating: selectedBook.rating || "",
     review: selectedBook.review || "",
     image: selectedBook.image || "",
     status: selectedBook.status || "",
@@ -35,6 +35,7 @@ export default function UpdateBookForm({
     if (!selectedBook) {
       return;
     }
+  
     updateBook(selectedBook.id, formValues, selectedBook.status);
 
     handleUpdateBookClose();
@@ -130,9 +131,9 @@ export default function UpdateBookForm({
           value={formValues.status}
         >
           <option value="">Status</option>
-          <option value="current">Current</option>
-          <option value="future">Future Read</option>
-          <option value="finished">Finished</option>
+          <option value="current">current</option>
+          <option value="future">future</option>
+          <option value="finished">finished</option>
         </select>
       </div>
       <div className="text-end">

@@ -13,9 +13,7 @@ import Navigation from "./components/Navigation.tsx";
 const router = createBrowserRouter([
   {
     path: "/",
-    // Part that doesn't change - Navbar
     element: <Root />,
-    // Options for the part that does change - Pages
     children: [
       {
         path: "/pages/Current",
@@ -35,7 +33,7 @@ const router = createBrowserRouter([
     path: "/pages/Home",
     element:  (
       <div>
-        <Navigation/>
+        <Navigation />
         <Home/>
       </div>
     ),

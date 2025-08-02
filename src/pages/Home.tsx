@@ -8,7 +8,7 @@ export default function Home() {
       </div>
 
       <div className="col-md">
-        <Image src="../public/images/cosmic-library.jpg" />
+        <Image src="../images/cosmic-library.jpg" />
       </div>
     </div>
   );

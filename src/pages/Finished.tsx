@@ -1,52 +1,51 @@
 import { useEffect } from "react";
-import { Modal, ModalBody, ModalTitle } from "react-bootstrap";
-import type { Book } from "../types";
 import BookCard from "../components/BookCard";
 import { useOutletContext } from "react-router-dom";
+import type { Book } from "../types";
+
+type ContextType = {
+  books: Book;
+  fetchBooks: (bookType: string) => void;
+  updateBook: (
+    bookId: number,
+    updatedData: Omit<Book, "id">,
+    bookType: string
+  ) => void;
+  deleteBook: (bookId: number, bookType: string) => void;
+  isUpdateModalOpen: boolean;
+  setIsUpdateModalOpen: (newValue: boolean) => void;
+  handleUpdateButtonClick: (bookId: number) => void
+};
 
 export default function Finished() {
-  const { fetchBooks, books } = useOutletContext();
+  const { books, fetchBooks, updateBook, deleteBook, isUpdateModalOpen, setIsUpdateModalOpen, handleUpdateButtonClick } =
+    useOutletContext<ContextType>();
 
   useEffect(() => {
     fetchBooks("finished");
   }, []);
 
-  //const selectedFinishedBook = finished.find((book) => book.id === selectedBookId);
-
-  //const [isAddFinishedBookModalOpen, setIsAddFinishedBookModalOpen] = useState(false);
-
-  //const handleAddBookClose = () => setIsAddFinishedBookModalOpen(false);
+  if (books === null) {
+    return;
+  }
 
   return (
     <>
-      <h1 id="finished-h1">Past Adventures</h1>
       <div>
-        {Object.values(books).length > 0 &&
-          Object.values(books).map((book) => (
-            <BookCard
-              key={book.id}
-              book={book}
-              //deleteBook={deleteBook}
-              //updateBook={updateBook}
-            />
-          ))}
-      </div>
-
-      {/* <Modal
-        show={isAddFinishedBookModalOpen}
-        onHide={() => setIsAddFinishedBookModalOpen(false)}
-      >
-        <Modal.Header closeButton>
-          <ModalTitle>Add New Book</ModalTitle>
-        </Modal.Header>
-
-        <ModalBody>
-          <AddBookForm
-          // addNewBook={addNewBook}
-          //  handleAddBookClose={handleAddBookClose}
+      <h1 id="finished-h1">Past Adventures</h1>
+        {books.map((book) => (
+          <BookCard
+            key={book.id}
+            book={book}
+            updateBook={updateBook}
+            deleteBook={deleteBook}
+            selectedBook={book}
+            isUpdateModalOpen={isUpdateModalOpen}
+            setIsUpdateModalOpen={setIsUpdateModalOpen}
+            handleUpdateButtonClick={handleUpdateButtonClick}
           />
-        </ModalBody>
-      </Modal> */}
+        ))}
+      </div>
     </>
   );
 }

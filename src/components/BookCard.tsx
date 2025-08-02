@@ -1,4 +1,3 @@
-import { useState } from "react";
 import type { Book } from "../types";
 import {
   Button,
@@ -11,18 +10,16 @@ import UpdateBookForm from "./UpdateBookForm";
 
 type BookCardProps = {
   book: Book;
-  selectedBook?: Book;
   deleteBook: (id: number, bookType: string) => void;
   updateBook: (bookId: number, updatedData: Omit<Book, "id">, bookType: string) => void;
+  selectedBook: Book
+  isUpdateModalOpen: boolean
+  setIsUpdateModalOpen: (newValue: boolean) => void;
+  handleUpdateButtonClick: (bookId: number) => void
 };
 
-export default function BookCard({
-  book,
-  selectedBook,
-  deleteBook,
-  updateBook,
-}: BookCardProps) {
-  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+export default function BookCard({ book, selectedBook, updateBook, deleteBook, isUpdateModalOpen, setIsUpdateModalOpen, handleUpdateButtonClick }: BookCardProps) {
+
   const handleUpdateBookClose = () => setIsUpdateModalOpen(false);
 
   return (
@@ -30,7 +27,7 @@ export default function BookCard({
       <div id="card-container">
         <div
           className="card m-2"
-          style={{ maxWidth: "540px" }}
+          style={{ maxWidth: "540px", minWidth: "540px" }}
           key={book.id}
           id="bookcard"
         >
@@ -38,7 +35,7 @@ export default function BookCard({
             <div className="col-md-4 d-flex justify-content-center">
               <img
                 id="bookcard-image"
-                src={`../${book.image}`}
+                src={book.image}
                 className="img-fluid rounded-start"
                 alt={book.title}
               />
@@ -57,7 +54,7 @@ export default function BookCard({
                   id="update-btn"
                   type="button"
                   className="btn"
-                  onClick={() => setIsUpdateModalOpen(true)}
+                  onClick={() => handleUpdateButtonClick(book.id)}
                 >
                   Update
                 </Button>
@@ -65,7 +62,7 @@ export default function BookCard({
                   id="delete-btn"
                   type="button"
                   className="btn btn-danger"
-                  onClick={() => deleteBook}
+                  onClick={() => deleteBook(book.id,book.status)}
                 >
                   Delete
                 </Button>
